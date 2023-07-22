@@ -39,7 +39,6 @@ public class LuncherController : MonoBehaviour
             force = Mathf.Lerp(0, maxForce, timeHold / maxTimeHold);
             yield return new WaitForEndOfFrame();
             timeHold += Time.deltaTime;
-            Debug.Log(force);
         }
 
         collider.GetComponent<Rigidbody>().AddForce(Vector3.forward * (-force));
