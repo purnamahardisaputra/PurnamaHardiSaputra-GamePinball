@@ -6,7 +6,6 @@ public class BumpersController : MonoBehaviour
 {
     public Collider ball;
     public float multiplier;
-    public Color color;
 
     private Renderer renderer;
     private Animator animator;
@@ -15,7 +14,9 @@ public class BumpersController : MonoBehaviour
     {
         renderer = GetComponent<Renderer>();
         animator = GetComponent<Animator>();
-        renderer.material.color = color;
+
+        // ganti warna ketika awal start game menjadi merah
+        renderer.material.color = Color.red;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -26,6 +27,20 @@ public class BumpersController : MonoBehaviour
             ballRig.velocity *= multiplier;
 
             animator.SetTrigger("BumperHit");
+
+            // rubah warna dari merah menjadi biru, biru menjadi hijau, hijau menjadi merah
+            if (renderer.material.color == Color.red)
+            {
+                renderer.material.color = Color.blue;
+            }
+            else if (renderer.material.color == Color.blue)
+            {
+                renderer.material.color = Color.green;
+            }
+            else if (renderer.material.color == Color.green)
+            {
+                renderer.material.color = Color.red;
+            }
         }
     }
 }

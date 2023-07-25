@@ -20,7 +20,6 @@ public class PaddleController : MonoBehaviour
     void Update()
     {
         ReadInput();
-        Debug.Log(hinge.spring.spring + " " + this.gameObject.name);
     }
 
     void ReadInput()
