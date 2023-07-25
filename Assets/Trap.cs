@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Trap : MonoBehaviour
 {
     [SerializeField] private GameObject Ball;
     private float timeSpawn = 10f;
@@ -12,10 +12,8 @@ public class Coin : MonoBehaviour
     private void Awake()
     {
         Ball = GameObject.Find("Ball");
-        if (!PlayerPrefs.HasKey("CoinScore"))
-        {
-            PlayerPrefs.SetInt("CoinScore", GameManager.instance.CoinScore + 1);
-        }
+        // rotate this gameobject to fix position
+        transform.Rotate(new Vector3(-90, 0, 0));
     }
 
     void Update()
@@ -24,8 +22,6 @@ public class Coin : MonoBehaviour
         {
             StartCoroutine(DestroyAfterDelay(timeSpawn));
         }
-
-        transform.Rotate(new Vector3(0, 0, 45) * (Time.deltaTime * 2));
     }
 
     private void OnTriggerEnter(Collider other)
@@ -34,7 +30,9 @@ public class Coin : MonoBehaviour
         {
             isBallTouching = true;
             Destroy(this.gameObject);
-            GameManager.instance.CoinScore += addCoinScore();
+            GameManager.instance.Health += decreaseHealth();
+            Ball.transform.position = RespawnController.instance.respawnPoint.position;
+            Ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
 
@@ -47,12 +45,8 @@ public class Coin : MonoBehaviour
         }
     }
 
-    public int addCoinScore()
+    public int decreaseHealth()
     {
-        if (PlayerPrefs.GetInt("CoinScore") <= GameManager.instance.CoinScore)
-        {
-            PlayerPrefs.SetInt("CoinScore", GameManager.instance.CoinScore + 1);
-        }
-        return +1;
+        return -1;
     }
 }

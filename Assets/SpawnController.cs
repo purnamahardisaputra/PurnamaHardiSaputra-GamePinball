@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoinController : MonoBehaviour
+public class SpawnController : MonoBehaviour
 {
     [SerializeField] private float respawnRadius; // Radius respawn
-    [SerializeField] private GameObject[] RespawnCoinPoints;
-    [SerializeField] private GameObject CoinPrefab;
-    [SerializeField] private int CoinCount;
+    [SerializeField] private GameObject[] RespawnPrefabsPoints;
+    [SerializeField] private GameObject SpawnPrefabs;
+    [SerializeField] private int Count;
 
     private List<GameObject> usedRespawnPoints = new List<GameObject>();
 
@@ -22,13 +22,13 @@ public class CoinController : MonoBehaviour
 
     private void SpawnCoins()
     {
-        int respawnPointsCount = RespawnCoinPoints.Length;
-        if (CoinCount > respawnPointsCount)
+        int respawnPointsCount = RespawnPrefabsPoints.Length;
+        if (Count > respawnPointsCount)
         {
-            CoinCount = respawnPointsCount;
+            Count = respawnPointsCount;
         }
 
-        for (int i = 0; i < CoinCount; i++)
+        for (int i = 0; i < Count; i++)
         {
             int randomIndex;
             GameObject randomRespawnPoint;
@@ -36,7 +36,7 @@ public class CoinController : MonoBehaviour
             do
             {
                 randomIndex = Random.Range(0, respawnPointsCount);
-                randomRespawnPoint = RespawnCoinPoints[randomIndex];
+                randomRespawnPoint = RespawnPrefabsPoints[randomIndex];
             }
             while (usedRespawnPoints.Contains(randomRespawnPoint));
 
@@ -46,7 +46,7 @@ public class CoinController : MonoBehaviour
             Vector2 randomCirclePoint = Random.insideUnitCircle * respawnRadius;
             respawnPosition = new Vector3(randomCirclePoint.x, 0f, randomCirclePoint.y) + randomRespawnPoint.transform.position;
 
-            var newCoin = Instantiate(CoinPrefab, respawnPosition, Quaternion.Euler(90, 0, 0));
+            var newCoin = Instantiate(SpawnPrefabs, respawnPosition, Quaternion.Euler(90, 0, 0));
             newCoin.transform.parent = this.gameObject.transform;
             newCoin.SetActive(true);
         }
@@ -54,10 +54,10 @@ public class CoinController : MonoBehaviour
 
     private void Update()
     {
-        if(transform.childCount < 3)
+        if (transform.childCount < 3)
         {
             TimeDelaySpawn -= Time.deltaTime;
-            if(TimeDelaySpawn <= 0)
+            if (TimeDelaySpawn <= 0)
             {
                 SpawnCoinSingle();
             }
@@ -69,7 +69,7 @@ public class CoinController : MonoBehaviour
         Vector2 vector2 = Random.insideUnitCircle * respawnRadius;
         respawnPosition = new Vector3(vector2.x, 0f, vector2.y) + transform.position;
 
-        var spawnCoin = Instantiate(CoinPrefab, respawnPosition, Quaternion.Euler(90, 0, 0));
+        var spawnCoin = Instantiate(SpawnPrefabs, respawnPosition, Quaternion.Euler(90, 0, 0));
         spawnCoin.transform.parent = this.gameObject.transform;
         TimeDelaySpawn = 3f;
     }

@@ -5,25 +5,22 @@ using UnityEngine;
 public class RespawnController : MonoBehaviour
 {
     [SerializeField] private GameObject ball;
-    [SerializeField] private Transform respawnPoint;
-    // instance respawn controller
-    RespawnController instance;
+    [SerializeField] public Transform respawnPoint;
+
+    public static RespawnController instance;
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
-        else
-        {
-            Destroy(this);
-        }
+        ball = GameObject.Find("Ball");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject == ball)
+        if (other.gameObject == ball)
         {
             ball.transform.position = respawnPoint.position;
             ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
